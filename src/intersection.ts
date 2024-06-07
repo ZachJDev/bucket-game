@@ -40,13 +40,9 @@ export const segmentsIntersect =(p1: Point2D, q1: Point2D, p2: Point2D, q2: Poin
     return false;
 }
 
-export const hasSelfIntersections = (path: Point2D[]): boolean => {
-    for (let i = 0; i < path.length - 1; i++) {
-        for (let j = i + 1; j < path.length - 1; j++) {
-            if (segmentsIntersect(path[i], path[i + 1], path[j], path[j + 1])) {
-                return true;
-            }
-        }
-    }
-    return false;
+export const segmentIntersectsWithRect =(segment: Point2D[], rect:{x: number, y: number, w: number, h: number}) => {
+   return segmentsIntersect(segment[0], segment[1], {x: rect.x, y: rect.y}, {x: rect.x, y: rect.y + rect.h} ) ||
+       segmentsIntersect(segment[0], segment[1], {x: rect.x, y: rect.y}, {x: rect.x + rect.w, y: rect.y} ) ||
+       segmentsIntersect(segment[0], segment[1], {x: rect.x + rect.w, y: rect.y}, {x: rect.x + rect.w, y: rect.y + rect.h} ) ||
+       segmentsIntersect(segment[0], segment[1], {x: rect.x, y: rect.y + rect.h}, {x: rect.x + rect.w, y: rect.y + rect.h} )
 }

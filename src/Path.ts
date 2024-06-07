@@ -1,6 +1,7 @@
 import p5 from "p5";
-import {segmentsIntersect} from "./intersection.ts";
+import {segmentIntersectsWithRect, segmentsIntersect} from "./intersection.ts";
 import {GRAVITY} from "./sharedConstants.ts";
+import {Faller} from "./Faller.ts";
 
 type Point = {x: number, y: number};
 
@@ -17,6 +18,7 @@ export class Path {
         this.segments = []
         this.s = sketch
         this.intersectionPoints = []
+        this.approximateSegments = []
 
     }
 
@@ -87,6 +89,24 @@ export class Path {
         this.approximateSegments = this.segments.filter((_el, i) => {
             return (i % step === 0 || i == 0)
 
+        })
+    }
+
+    segmentsIntersectWithFaller(faller: Faller): boolean {
+
+        for(let i = 0; i < this.approximateSegments.length - 2; i++) {
+            if(segmentIntersectsWithRect([this.approximateSegments[i], this.approximateSegments[i+ 1]], {x: faller.position.x, y: faller.position.y, w: 40, h: 40})) {
+                return true
+            }
+        }
+        return false
+    }
+
+    intersectsFallers(fallers: Faller[]) {
+        fallers.forEach( faller => {
+             if( this.segmentsIntersectWithFaller(faller)) {
+                 faller.fill = this.s.color(this.s.random(1, 256), this.s.random(1, 256), this.s.random(1, 256))
+             }
         })
     }
 

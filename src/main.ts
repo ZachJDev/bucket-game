@@ -3,6 +3,7 @@ import p5 from 'p5'
 import {Path} from "./Path.ts";
 import {Faller} from "./Faller.ts";
 import {RandomWalker} from "./RandomWalker.ts";
+import {DEBUG} from "./sharedConstants.ts";
 
 let s = (sketch: p5) => {
 
@@ -12,13 +13,14 @@ let s = (sketch: p5) => {
     let path: Path| null;
     sketch.setup = () => {
         sketch.createCanvas(700, 700);
+        fallers.push(new Faller(sketch))
         // sketch.noStroke()
     };
 
     sketch.draw = () => {
         sketch.background(240);
         if (sketch.frameCount > timer.pos + timer.prevFrameCount) {
-            // fallers.push(new Faller(sketch))
+            fallers.push(new Faller(sketch))
             timer.process()
         }
         if (path) {
@@ -34,7 +36,9 @@ let s = (sketch: p5) => {
             }
         })
 
-        if (path) path.debug()
+        if(path) path.intersectsFallers(fallers)
+
+        if (path && DEBUG) path.debug()
 
     }
 
@@ -42,10 +46,10 @@ let s = (sketch: p5) => {
         path = null
         path = new Path(sketch)
     }
-    sketch.mouseReleased = () => {
-        console.log(path)
-
-    }
+    // sketch.mouseReleased = () => {
+    //     console.log(path)
+    //
+    // }
     sketch.mouseDragged = () => {
         if(path) {
             path.segments.push({x: Math.floor(sketch.mouseX), y: Math.floor(sketch.mouseY)})

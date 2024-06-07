@@ -1,5 +1,5 @@
 import p5 from "p5";
-import {GRAVITY} from "./sharedConstants.ts";
+import {DEBUG, GRAVITY} from "./sharedConstants.ts";
 
 export class Faller{
 
@@ -10,12 +10,14 @@ export class Faller{
     constructor(context: p5) {
         this.s = context;
         this.position = this.s.createVector(this.s.random(0, this.s.width - 40), -10)
+        if(DEBUG) this.position = this.s.createVector(300, 300)
         this.fill = this.s.color(0, 0, 0)
     }
 
     process() {
         this.fall()
     }
+
 
     fall() {
         this.position.add(0, GRAVITY)

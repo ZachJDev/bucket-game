@@ -1,1 +1,2 @@
-export const GRAVITY = 0
+export const GRAVITY = .75
+export const DEBUG = false
